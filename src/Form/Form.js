@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import {
-    Button, TextField
+    Button, Paper, TextField
 } from '@mui/material'
 
 const Form = () => {
@@ -11,6 +11,9 @@ const Form = () => {
 
     //入力完了したデータ
     const [books, setBooks] = useState([]);
+
+    // 入力を確認
+    const [confirm, setConfirm]=useState(false);
 
     // 入力中のテキストをset
     const handleInputChange = e => {
@@ -26,21 +29,49 @@ const Form = () => {
     }
 
     // booksを確認
-    const show = () => {
-
+    const clickConfirm = () => {
+        if(!confirm){
+            setConfirm(true);
+        }
     }
 
+    //データを削除
+    const deleteText =(e)=>{
+        console.log(e.currentTarget.id)
+        books.splice(e.currentTarget.id, 1);
+        setBooks([...books]);
+    }
+
+    // ボタンの中身を表示
+    const showButton=(e)=>{
+        window.alert("あなたは"+e.currentTarget.id+"の"+e.currentTarget.name+"をクリックしました")
+    }
     return (
         <div>
             {text}
-            <TextField className="editAria" label="name" value={text} onChange={handleInputChange} />
-            <Button variant="outlined" onClick={addText}>ボタンを追加</Button >
-            <Button variant="contained" color="primary" onClick={show}>フォルダの読み込み</Button>
-            {books.map((book, key) => {
+            <TextField className="editAria" label="name" value={text} disabled={confirm} onChange={handleInputChange} />
+            <Button variant="outlined" onClick={addText} disabled={confirm}>追加</Button >
+            <Button variant="contained" color="primary" onClick={clickConfirm}>入力の確定</Button>
+            
+            {!confirm?(books.map((book, key) => {
                 return(
-                    <Button variant="contained" color="success" key={key}>{key+1}.{book}</Button>
+                    <Paper key={key}>
+                        {key}:{book}
+                        <Button id={key} name={book} onClick={deleteText} variant="outlined" color="warning" >消す</Button>
+                    </Paper>
                 )
-            })}
+            }))
+            :
+            (<div></div>)}
+            {confirm?(
+                books.map((book, key) => {
+                    return(
+                      <Button id={key} name={book} onClick={showButton} variant="contained" color="success" >{key}:{book}</Button>
+                    )
+                }))
+                :
+                (<div></div>)
+            }
         </div>
     )
 };
