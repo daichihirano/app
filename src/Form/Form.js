@@ -50,7 +50,7 @@ const Form = () => {
         <div>
             <TextField className="editAria" label="name" value={text} disabled={confirm} onChange={handleInputChange} />
             <Button variant="outlined" onClick={addText} disabled={confirm}>追加</Button >
-            <Button variant="contained" color="primary" onClick={clickConfirm}>入力の確定</Button>
+            <Button variant="contained" color="primary" onClick={clickConfirm} disabled={confirm}>入力の確定</Button>
             
             {!confirm?(books.map((book, key) => {
                 return(
